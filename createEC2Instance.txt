@@ -53,6 +53,3 @@ aws ec2 describe-instances --instance-ids i-0787e4282810ef9cf --query "Reservati
 
 # Connect to the EC2 Instance
 ssh -i devenv-key.pem user@54.183.22.25
-
-# Guide for setting up LAMP stack on AWS Linux AMI
-https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-LAMP.html

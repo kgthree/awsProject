@@ -1,0 +1,2 @@
+# Guide for setting up LAMP stack on AWS Linux AMI
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-LAMP.html
