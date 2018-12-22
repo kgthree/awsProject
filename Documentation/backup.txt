@@ -1,0 +1,5 @@
+# Create Directory for backups
+mkdir -p ~/backup/{db,core,logs,conf}
+
+# Backup the database
+mysqldump -u [database_user] -p [database_name] > [~/backup/db/yourDB.sql]
