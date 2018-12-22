@@ -1,0 +1,58 @@
+# Create IAM user for personal user
+# Setup MFA for root user
+# Turn off all root user APIs
+
+# Set up Billing Alerts
+https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html
+
+# Configure AWS CLI for using API credentials
+https://docs.aws.amazon.com/cli/latest/userguide/install-macos.html
+Note: Output format TABLE for easier read or JSON for better programmatic info
+
+# Use the AWS CLI to get info about your AWS account
+aws ec2 describe-instances
+aws ec2 describe-regions --output table
+
+Tutorial: Using the AWS Command Line Interface to Deploy an Amazon EC2 Development Environment
+https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-tutorial.html
+
+Create a Security Group and Key Pair for the EC2 Instance
+aws ec2 create-security-group --group-name devenv-sg --vpc-id vpc-xxxxxxxx --description "Security group for development environment"
+
+Note: --vpc-id {vpc-xxxxxxxx} is an optional parameter that can be added to assign the vpc
+
+# Add the following rules to the security group to make the web server available
+aws ec2 authorize-security-group-ingress --group-name devenv-sg --protocol tcp --port 22 --cidr {Limit to only devices that need SSH}
+aws ec2 authorize-security-group-ingress --group-name devenv-sg --protocol tcp --port 80 --cidr {0.0.0.0/0}
+aws ec2 authorize-security-group-ingress --group-name devenv-sg --protocol tcp --port 443 --cidr {0.0.0.0/0}
+
+Note: 0.0.0.0/0 is open to the entire internet. Restrict access as needed
+
+Princeton CIDR ranges
+https://www.net.princeton.edu/ip-network-ranges.html
+
+# Generate the EC2 key pair used for SSH connection to server
+aws ec2 create-key-pair --key-name devenv-key --query "KeyMaterial" --output text > devenv-key.pem
+
+# Rewrite permission on the SSH private key
+chmod 400 devenv-key.pem
+
+Note: Make sure to store the .pem file securely in ~/.ssh directory
+
+# Launch the EC2 Instance
+aws ec2 run-instances --image-id ami-xxxxxxxx \
+                             --subnet-id subnet-xxxxxxxx \
+                             --security-group-ids sg-b018ced5 \
+                             --count 1 \
+                             --instance-type t2.micro \
+                             --key-name devenv-key \
+                             --query "Instances[0].InstanceId"
+
+# Get new EC2 Instance public IP
+aws ec2 describe-instances --instance-ids i-0787e4282810ef9cf --query "Reservations[0].Instances[0].PublicIpAddress"
+
+# Connect to the EC2 Instance
+ssh -i devenv-key.pem user@54.183.22.25
+
+# Guide for setting up LAMP stack on AWS Linux AMI
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-LAMP.html
