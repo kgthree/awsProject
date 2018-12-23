@@ -25,7 +25,7 @@
 *.log
 *.sql
 *.sqlite
-*phpMyAdmin/*
+phpMyAdmin/*
 
 # OS generated files #
 ######################
