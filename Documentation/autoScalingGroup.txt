@@ -1,0 +1,27 @@
+#  Using your AMI, create an auto scaling group
+#  Put a Elastic Load Balancer infront of that VM and load balance between two
+Availability Zones (one EC2 in each AZ).
+
+aws elb create-load-balancer \
+--load-balancer-name my-load-balancer \
+--availability-zones us-east-1a us-east-1b \
+--listeners "Protocol=HTTP,LoadBalancerPort=80,InstanceProtocol=HTTP,InstancePort=80" \
+--security-groups sg-0c13c6a978c298a18
+
+aws ec2 start-instances --instance-ids i-0dda5daa2719ebba7
+
+
+aws autoscaling create-auto-scaling-group \
+  --auto-scaling-group-name my-auto-scaling-group \
+  --launch-configuration-name my-auto-scaling-group \
+  --max-size 3 \
+  --min-size 1 \
+  --desired-capacity 2 \
+  --load-balancer-names my-load-balancer \
+  --health-check-type ELB \
+  --default-cooldown 600 \
+  --termination-policies "OldestInstance" \
+  --vpc-zone-identifier subnet-021a750d,subnet-02c26c5e,subnet-bc0a77f6,subnet-cb16e4f5 \
+  --health-check-grace-period 120
+
+  aws autoscaling attach-instances --instance-ids i-0dda5daa2719ebba7 --auto-scaling-group-name my-auto-scaling-group
