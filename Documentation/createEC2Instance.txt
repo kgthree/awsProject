@@ -40,9 +40,8 @@ chmod 400 devenv-key.pem
 Note: Make sure to store the .pem file securely in ~/.ssh directory
 
 # Launch the EC2 Instance
-aws ec2 run-instances --image-id ami-xxxxxxxx \
-                             --subnet-id subnet-xxxxxxxx \
-                             --security-group-ids sg-b018ced5 \
+aws ec2 run-instances --image-id ami-009d6802948d06e52 \
+                             --security-group-ids sg-0c13c6a978c298a18 \
                              --count 1 \
                              --instance-type t2.micro \
                              --key-name devenv-key \
