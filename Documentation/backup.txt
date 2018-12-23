@@ -3,3 +3,28 @@ mkdir -p ~/backup/{db,core,logs,conf}
 
 # Backup the database
 mysqldump -u [database_user] -p [database_name] > [~/backup/db/yourDB.sql]
+
+# Backup Core files
+tar -zcvf /home/ec2-user/backup/core/core.gz /var/www/html
+
+# Backup Configuration files
+tar -zcvf /home/ec2-user/backup/conf/conf.tar \
+/full/path/to/first_location \
+/full/path/to/second_location \
+/full/path/to/third_location
+
+# Backup Log files
+tar -zcvf /home/ec2-user/backup/logs/logs.tar \
+/full/path/to/first_location \
+/full/path/to/second_location \
+/full/path/to/third_location
+
+# Package Everything together
+tar -zcvf /home/ec2-user/latest.backup.tar /home/ec2-user/backup/
+
+# Download the Package
+scp -i ~/.ssh/devenv-key.pem  user@IPAddress:/home/ec2-user/latest.backup.tar /Users/kg3/github/fortune/backup_$(date +%Y%m%d_%H%M%S).tar
+
+# Delete Backup from server
+rm /home/username/latest.backup.tar
+rm -rfi /home/username/backup/
