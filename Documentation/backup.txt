@@ -1,3 +1,6 @@
+# Note
+Backups will not be visible in the GitHub repo for security reasons
+
 # Create Directory for backups
 mkdir -p ~/backup/{db,core,logs,conf}
 

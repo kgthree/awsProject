@@ -1,0 +1,43 @@
+/*
+Goal - Take a snapshot of your VM, delete the VM, and deploy a new one from
+the snapshot. Basically disk backup + disk restore
+*/
+
+# Create an AMI using from your EC2 instance
+aws ec2 create-image --instance-id i-02d1f65e77c929fd6 --name "My server" --description "An AMI for my server"
+$ ami-061e391f7e8ddfc29
+
+# Delete the VM
+aws ec2 describe-instances
+$ i-0d119a36e365ad0f7
+aws ec2 terminate-instances --instance-ids i-02d1f65e77c929fd6
+
+# Deploy a new VM using the AMI
+aws ec2 run-instances --image-id ami-061e391f7e8ddfc29 \
+                             --subnet-id subnet-xxxxxxxx \
+                             --security-group-ids sg-0c13c6a978c298a18 \
+                             --count 1 \
+                             --instance-type t2.micro \
+                             --key-name devenv-key \
+                             --query "Instances[0].InstanceId"
+
+$ i-0dda5daa2719ebba7
+
+
+Note:
+Originally I did this a different way that was slightly more involved.
+
+aws ec2 describe-volumes --region us-east-1 --filters Name=attachment.instance-id,Values=i-0d119a36e365ad0f7 Name=attachment.delete-on-termination,Values=true
+$ vol-0d62a7f862a28d376
+
+aws ec2 create-snapshot --volume-id vol-0d62a7f862a28d376 --description "This is my root volume snapshot"
+$ snap-03a1f6a51fb29d57a
+Note: It takes some time save the snapshot, run the following command to check in
+aws ec2 describe-snapshots --snapshot-id snap-03a1f6a51fb29d57a
+
+From here I was able to create a snapshot of my EC2 instance. I wasn't able
+to figure out the right series of CLI inputs to convert the snapshot into a an AMI.
+My guess is that you have to restore the snapshot to a volume and then create a new
+EC2 Instance where you assign the volume ID. I think there is more to this though.
+However, I was able to figure out how to convert the snapshot to an AMI through then
+console online.
