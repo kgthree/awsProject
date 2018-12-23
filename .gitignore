@@ -25,6 +25,7 @@
 *.log
 *.sql
 *.sqlite
+*phpMyAdmin/*
 
 # OS generated files #
 ######################
@@ -36,6 +37,5 @@
 ehthumbs.db
 Thumbs.db
 
-# phpMyAdmin Files #
+# Configuration Files #
 ######################
-config.inc.php
