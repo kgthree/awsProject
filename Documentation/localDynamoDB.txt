@@ -1,0 +1,11 @@
+# Download local DynamoDB
+https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html
+
+# Install Java Dev Kit
+java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
+
+# Local DynamoDB runs as a local service, open an additional tab in terminal to run further commands
+aws dynamodb list-tables --endpoint-url http://localhost:8000
+
+# tutorial I used for creating my first app
+https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.NodeJs.html
