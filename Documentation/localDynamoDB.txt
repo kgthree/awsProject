@@ -9,3 +9,6 @@ aws dynamodb list-tables --endpoint-url http://localhost:8000
 
 # tutorial I used for creating my first app
 https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.NodeJs.html
+
+# Moving to Production
+https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.NodeJs.Summary.html
